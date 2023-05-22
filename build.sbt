@@ -20,4 +20,5 @@ libraryDependencies ++= Seq(
   "org.http4s"                   %% "http4s-blaze-server"  % "0.23.14",
   "org.http4s"                   %% "http4s-blaze-client"  % "0.23.14",
   "dev.zio"                      %% "zio-streams"          % "2.0.10",
+  "org.parboiled"                %% "parboiled"            % "2.4.1",
 )
