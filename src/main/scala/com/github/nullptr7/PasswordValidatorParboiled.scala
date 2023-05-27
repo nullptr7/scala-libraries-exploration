@@ -1,8 +1,6 @@
 package com.github.nullptr7
 
 import org.parboiled2._
-import org.parboiled2.support.hlist
-import org.parboiled2.support.hlist.HNil
 
 private object PasswordValidatorParboiled extends App {
   final private val passwordDecipheredString =
