@@ -22,4 +22,5 @@ libraryDependencies ++= Seq(
   "dev.zio"                      %% "zio-streams"          % "2.0.13",
   "io.d11"                       %% "zhttp"                % "2.0.0-RC11",
   "org.parboiled"                %% "parboiled"            % "2.4.1",
+  "com.typesafe.play"            %% "play"                 % "2.9.0-M6",
 )
