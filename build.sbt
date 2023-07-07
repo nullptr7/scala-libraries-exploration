@@ -8,8 +8,8 @@ lazy val root = (project in file("."))
   )
 
 libraryDependencies ++= Seq(
-  "eu.timepit"                   %% "refined"              % "0.10.2",
-  "eu.timepit"                   %% "refined-cats"         % "0.10.2",
+  "eu.timepit"                   %% "refined"              % "0.10.3",
+  "eu.timepit"                   %% "refined-cats"         % "0.10.3",
   "io.circe"                     %% "circe-core"           % "0.14.5",
   "io.circe"                     %% "circe-parser"         % "0.14.5",
   "io.circe"                     %% "circe-generic"        % "0.14.5",
@@ -23,4 +23,5 @@ libraryDependencies ++= Seq(
   "io.d11"                       %% "zhttp"                % "2.0.0-RC11",
   "org.parboiled"                %% "parboiled"            % "2.4.1",
   "com.typesafe.play"            %% "play"                 % "2.9.0-M6",
+  "io.estatico"                  %% "newtype"              % "0.4.4",
 )
