@@ -24,4 +24,8 @@ libraryDependencies ++= Seq(
   "org.parboiled"                %% "parboiled"            % "2.4.1",
   "com.typesafe.play"            %% "play"                 % "2.9.0-M6",
   "io.estatico"                  %% "newtype"              % "0.4.4",
+  "org.apache.httpcomponents"     % "httpclient"           % "4.5.14",
+  "org.mockito"                  %% "mockito-scala"        % "1.17.22" % Test,
+  "org.scalactic"                %% "scalactic"            % "3.2.16",
+  "org.scalatest"                %% "scalatest"            % "3.2.16"  % Test,
 )
