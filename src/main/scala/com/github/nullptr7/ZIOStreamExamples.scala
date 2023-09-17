@@ -2,8 +2,8 @@ package com.github.nullptr7
 
 import java.io.IOException
 import java.util.UUID
-import zhttp.http._
-import zhttp.service.Server
+//import zhttp.http._
+//import zhttp.service.Server
 import zio._
 import zio.stream.ZStream
 import zio.Console.printLine
@@ -11,7 +11,9 @@ import zio.Console.printLine
 object ZIOStreamExamples extends ZIOAppDefault {
   final private case class ProcessId(value: String) extends AnyVal
 
-  private def server(queue: Queue[ProcessId]): ZIO[Any, Throwable, Nothing] =
+
+
+  /*private def server(queue: Queue[ProcessId]): ZIO[Any, Throwable, Nothing] =
     Server.start(8999, httpApp(queue))
 
   private val chunkOfProcessIds: Chunk[ProcessId] =
@@ -63,6 +65,7 @@ object ZIOStreamExamples extends ZIOAppDefault {
       sFork <- server(queue).fork
       cFork <- consumer(queue).fork
       _     <- sFork.zip(cFork).join
-    } yield ()
+    } yield ()*/
 
+  override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = ???
 }
