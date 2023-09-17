@@ -23,7 +23,7 @@ object TapirZIOExample extends ZIOAppDefault {
 
   implicit val petCodec: JsonCodec[Pet] = DeriveJsonCodec.gen[Pet]
 
-  val petEndpoint: PublicEndpoint[Int, String, Pet, Any] =
+  private val petEndpoint: PublicEndpoint[Int, String, Pet, Any] =
     endpoint
       .get
       .in("pet" / path[Int]("petId"))
@@ -35,25 +35,25 @@ object TapirZIOExample extends ZIOAppDefault {
     ZioHttpInterpreter(ZioHttpServerOptions.customiseInterceptors.options.prependInterceptor(Interceptor.apply())).toHttp(
       petEndpoint.zServerLogic(petId =>
         if (petId == 35)
-          ZIO.sleep(Duration.fromSeconds(5)) *> ZIO.succeed(Pet("Tapirus terrestris", "https://en.wikipedia.org/wiki/Tapir"))
+          ZIO.succeed(Pet("Tapirus terrestris", "https://en.wikipedia.org/wiki/Tapir")).delay(Duration.fromSeconds(5))
         else ZIO.fail("Unknown pet id")
       )
     )
 
   // Same as above, but combining endpoint description with server logic:
-  val petServerEndpoint: ZServerEndpoint[Any, Any] = petEndpoint.zServerLogic { petId =>
+  private val petServerEndpoint: ZServerEndpoint[Any, Any] = petEndpoint.zServerLogic { petId =>
     if (petId == 35)
-      ZIO.sleep(Duration.fromSeconds(5)) *> ZIO.succeed(Pet("Tapirus terrestris", "https://en.wikipedia.org/wiki/Tapir"))
+      ZIO.succeed(Pet("Tapirus terrestris", "https://en.wikipedia.org/wiki/Tapir")).delay(Duration.fromSeconds(5))
     else
       ZIO.fail("Unknown pet id")
   }
 
   // Docs
-  val swaggerEndpoints: List[ZServerEndpoint[Any, Any]] =
+  private val swaggerEndpoints: List[ZServerEndpoint[Any, Any]] =
     SwaggerInterpreter().fromEndpoints[Task](List(petEndpoint), "Our pets", "1.0")
 
   // Starting the server
-  val routes: HttpApp[Any, Throwable] =
+  private val routes: HttpApp[Any, Throwable] =
     ZioHttpInterpreter(ZioHttpServerOptions.customiseInterceptors.options.prependInterceptor(Interceptor.apply())).toHttp(List(petServerEndpoint) ++ swaggerEndpoints)
 
   override def run: URIO[Any, ExitCode] =
@@ -67,11 +67,11 @@ object TapirZIOExample extends ZIOAppDefault {
 
   case class ServerTimeout(duration: FiniteDuration)
 
-  val serverTimeout: AttributeKey[ServerTimeout] = AttributeKey[ServerTimeout]
+  private val serverTimeout: AttributeKey[ServerTimeout] = AttributeKey[ServerTimeout]
 
   def apply(duration: FiniteDuration) = new ServerTimeout(duration)
 
-  object Interceptor {
+  private object Interceptor {
     def apply(): EndpointInterceptor[Task] =
       new EndpointInterceptor[Task] {
         override def apply[B](responder: Responder[Task, B], endpointHandler: EndpointHandler[Task, B]): EndpointHandler[Task, B] =
