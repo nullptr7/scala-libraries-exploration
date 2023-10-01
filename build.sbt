@@ -34,4 +34,5 @@ libraryDependencies ++= Seq(
   "org.scalatest"                %% "scalatest"               % "3.2.16"  % Test,
   "org.slf4j"                     % "slf4j-api"               % "2.0.9",
   "org.slf4j"                     % "slf4j-simple"            % "2.0.9",
+  "com.github.cb372"             %% "cats-retry"              % "3.1.0",
 )
