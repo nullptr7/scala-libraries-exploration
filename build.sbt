@@ -35,4 +35,6 @@ libraryDependencies ++= Seq(
   "org.slf4j"                     % "slf4j-api"               % "2.0.9",
   "org.slf4j"                     % "slf4j-simple"            % "2.0.9",
   "com.github.cb372"             %% "cats-retry"              % "3.1.0",
+  "com.github.scopt"             %% "scopt"                   % "4.1.0",
+  "org.rogach"                   %% "scallop"                 % "5.0.0",
 )
