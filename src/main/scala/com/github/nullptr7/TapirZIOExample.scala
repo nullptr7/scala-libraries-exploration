@@ -2,18 +2,18 @@ package com.github.nullptr7
 
 import sttp.model.StatusCode
 import sttp.monad.MonadError
-import sttp.tapir.{ AttributeKey, PublicEndpoint }
+import sttp.tapir.{AttributeKey, PublicEndpoint}
 import sttp.tapir.generic.auto._
 import sttp.tapir.json.zio.jsonBody
-import sttp.tapir.server.interceptor.{ DecodeFailureContext, DecodeSuccessContext, EndpointHandler, EndpointInterceptor, Responder, SecurityFailureContext }
+import sttp.tapir.server.interceptor.{DecodeFailureContext, DecodeSuccessContext, EndpointHandler, EndpointInterceptor, Responder, SecurityFailureContext}
 import sttp.tapir.server.interpreter.BodyListener
-import sttp.tapir.server.model.{ ServerResponse, ValuedEndpointOutput }
-import sttp.tapir.server.ziohttp.{ ZioHttpInterpreter, ZioHttpServerOptions }
+import sttp.tapir.server.model.{ServerResponse, ValuedEndpointOutput}
+import sttp.tapir.server.ziohttp.{ZioHttpInterpreter, ZioHttpServerOptions}
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.ztapir._
-import zio.http.{ HttpApp, Server }
+import zio.http.{HttpApp, Response, Routes, Server}
 import zio.json._
-import zio.{ Duration, ExitCode, Task, URIO, ZIO, ZIOAppDefault, ZLayer }
+import zio.{&, Duration, ExitCode, Task, URIO, ZIO, ZIOAppDefault, ZLayer}
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
@@ -31,7 +31,7 @@ object TapirZIOExample extends ZIOAppDefault {
       .errorOut(stringBody)
       .out(jsonBody[Pet])
 
-  val petRoutes: HttpApp[Any, Throwable] =
+  val petRoutes: Routes[Any & Any, Response] =
     ZioHttpInterpreter(ZioHttpServerOptions.customiseInterceptors.options.prependInterceptor(Interceptor.apply())).toHttp(
       petEndpoint.zServerLogic(petId =>
         if (petId == 35)
@@ -53,12 +53,12 @@ object TapirZIOExample extends ZIOAppDefault {
     SwaggerInterpreter().fromEndpoints[Task](List(petEndpoint), "Our pets", "1.0")
 
   // Starting the server
-  private val routes: HttpApp[Any, Throwable] =
+  private val routes: Routes[Any & Any, Response] =
     ZioHttpInterpreter(ZioHttpServerOptions.customiseInterceptors.options.prependInterceptor(Interceptor.apply())).toHttp(List(petServerEndpoint) ++ swaggerEndpoints)
 
   override def run: URIO[Any, ExitCode] =
     ZIO.log("Running Server") *> Server
-      .serve(routes.withDefaultErrorResponse)
+      .serve(routes)
       .provide(
         ZLayer.succeed(Server.Config.default.port(8080)),
         Server.live,
