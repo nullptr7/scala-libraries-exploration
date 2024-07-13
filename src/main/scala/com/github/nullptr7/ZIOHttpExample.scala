@@ -15,7 +15,10 @@ object ZIOHttpExample extends ZIOAppDefault {
 //    RequestHandlerMiddlewares
 //      .updateResponse(_ => Response(Status.RequestTimeout, body = Body.fromString("Timed Out")))
 
-  val updateResponseOnTimeout = ???
+
+  private val middleware = Middleware.timeout(Duration.fromSeconds(3))
+
+  private lazy val patchEnv = Middleware.addHeader("X-Environment", "Dev")
 
 
     // .map(_ => Response(Status.RequestTimeout, body = Body.fromString("Timed Out")))
@@ -28,7 +31,7 @@ object ZIOHttpExample extends ZIOAppDefault {
     Server.serve(combined).provide(Server.defaultWithPort(8080))
 
 //  private lazy val combined = app @@ updateResponseOnTimeout
-  private lazy val combined = routes
+  private lazy val combined = routes @@ middleware @@ patchEnv
 
   private val zioDuration: Duration = Duration.fromMillis(6000)
 
